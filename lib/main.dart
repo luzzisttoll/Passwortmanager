@@ -45,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   const Text(
-                      "Melden Sie sich an :)",
+                      "Melden Sie sich an",
                       style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 20, height: 5)
                   ),

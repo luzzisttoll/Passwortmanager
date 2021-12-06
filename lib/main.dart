@@ -25,7 +25,7 @@ class Login extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: const Text('hs'),
       ),
       body: Center(
         child: Column(

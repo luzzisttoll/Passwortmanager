@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pwm/register.dart';
+import 'package:pwm/PWM.dart';
 
 
 void main() => runApp(const MyApp());
@@ -64,9 +65,14 @@ class Login extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                const ElevatedButton(
-                    onPressed: null,
-                    child: Text("test"),
+                ElevatedButton(
+                    child: const Text("Anmelden"),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.redAccent,
+                    ),
+                    onPressed: () {
+                      _navigateToPWM(context);
+                    },
                 ),
                 const SizedBox(width: 30),
                 ElevatedButton(
@@ -85,7 +91,10 @@ class Login extends StatelessWidget {
       ),
     );
   }
-     void _navigateToRegister(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => register()));
+    void _navigateToRegister(BuildContext context) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => register()));
+  }
+    void _navigateToPWM(BuildContext context) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => PWM()));
   }
 }

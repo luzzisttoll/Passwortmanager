@@ -29,7 +29,7 @@ class Login extends StatelessWidget {
       ),
       body: Center(
         child: Column(
-          children: [
+          children: [      
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[

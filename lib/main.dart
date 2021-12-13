@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pwm/register.dart';
-import 'package:pwm/PWM.dart';
+import 'package:pwm/pwm.dart';
 
 
 void main() => runApp(const MyApp());
@@ -71,7 +71,7 @@ class Login extends StatelessWidget {
                       primary: Colors.redAccent,
                     ),
                     onPressed: () {
-                      _navigateToPWM(context);
+                      _navigateToPwm(context);
                     },
                 ),
                 const SizedBox(width: 30),
@@ -92,9 +92,9 @@ class Login extends StatelessWidget {
     );
   }
     void _navigateToRegister(BuildContext context) {
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => register()));
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Register()));
   }
-    void _navigateToPWM(BuildContext context) {
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => PWM()));
+    void _navigateToPwm(BuildContext context) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const PWM()));
   }
 }

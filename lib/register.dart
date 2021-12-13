@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'main.dart';
 
-class register extends StatelessWidget {
+class Register extends StatelessWidget {
+  const Register({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +64,7 @@ class register extends StatelessWidget {
                   primary: Colors.redAccent,
                   ),
                   onPressed: () {
-                   null;
+                    _navigateToLogin(context);
                   },
                 ),
               ],
@@ -70,5 +73,8 @@ class register extends StatelessWidget {
         ),
       ),
     );
+  }
+  void _navigateToLogin(BuildContext context) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Login()));
   }
 }

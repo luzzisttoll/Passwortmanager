@@ -1,8 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'main.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Register extends StatelessWidget {
   const Register({Key? key}) : super(key: key);
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -63,9 +67,13 @@ class Register extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                   primary: Colors.redAccent,
                   ),
-                  onPressed: () {
-                    _navigateToLogin(context);
-                  },
+                  onPressed: ()  => FirebaseFirestore.instance.collection("Passwortmanager").add(
+                    {
+                      'timestamp': Timestamp.fromDate(
+                      DateTime.now(),
+                      ),
+                    },
+                  ), 
                 ),
               ],
             )
@@ -73,7 +81,7 @@ class Register extends StatelessWidget {
         ),
       ),
     );
-  }
+  } 
   void _navigateToLogin(BuildContext context) {
       Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Login()));
   }

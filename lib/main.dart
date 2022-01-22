@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pwm/register.dart';
@@ -9,6 +10,13 @@ void main() async {
   runApp(const MyApp());
 }
 
+final GlobalKey<FormState> FormKey = GlobalKey<FormState>();
+final emailController = TextEditingController();
+final passwortController = TextEditingController();
+final FirebaseAuth _auth = FirebaseAuth.instance;
+
+bool _success = Null as bool;
+String userEmail = "";
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);

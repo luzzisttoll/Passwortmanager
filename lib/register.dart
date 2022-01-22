@@ -6,8 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 class Register extends StatelessWidget {
   const Register({Key? key}) : super(key: key);
 
-  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,6 +13,7 @@ class Register extends StatelessWidget {
         title: const Text('Registrieren')
         ),
      body: Center(
+       key: FormKey,
         child: Column(
           children: [      
               Column(
@@ -30,6 +29,7 @@ class Register extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 8, vertical: 16),
                     child: TextFormField(
+                        controller: emailController,
                         decoration: const InputDecoration(
                           border: UnderlineInputBorder(),
                           labelText: 'Email',
@@ -40,16 +40,7 @@ class Register extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 8, vertical: 16),
                     child: TextFormField(
-                        decoration: const InputDecoration(
-                          border: UnderlineInputBorder(),
-                          labelText: 'Benutzername',
-                        )
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 16),
-                    child: TextFormField(
+                        controller: passwortController,
                         decoration: const InputDecoration(
                           border: UnderlineInputBorder(),
                           labelText: 'Passwort',
@@ -67,16 +58,24 @@ class Register extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                   primary: Colors.redAccent,
                   ),
-                  onPressed: ()  => FirebaseFirestore.instance.collection("Passwortmanager").add(
+                  onPressed: () async 
                     {
-                      'timestamp': Timestamp.fromDate(
-                      DateTime.now(),
-                      ),
+                     if (FormKey.currentState!.validate()) {
+                       _register();
+                     }
                     },
-                  ), 
                 ),
               ],
-            )
+            ),
+            Container(
+              alignment: Alignment.center,
+              child: Text(_success == null
+                ? ""
+                : (_success
+                  ? "erfolgreich angemeldet " + userEmail 
+                  : "Anmeldung fehlgeschlagen")
+              ),
+            ),
           ],
         ),
       ),
@@ -84,5 +83,23 @@ class Register extends StatelessWidget {
   } 
   void _navigateToLogin(BuildContext context) {
       Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Login()));
+  }
+  
+  void _register() async {
+    final User user = (await _auth.createUserWithEmailAndPassword(
+        email: emailController.text,
+        password: passwortController.text,
+      )
+  ).user;
+  if (user != null) {
+    setState(() {
+      _success = true;
+      _userEmail = user.email;
+    });
+  } else {
+    setState(() {
+      _success = true;
+    });
+  }
   }
 }

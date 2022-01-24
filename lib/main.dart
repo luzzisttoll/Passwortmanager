@@ -1,13 +1,21 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pwm/register.dart';
 import 'package:pwm/pwm.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'firebase_config.dart';
 
-void main() async {
+Future<void> main() async {
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+    if (kReleaseMode)
+      exit(1);
+  };
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseConfig.platformOptions);
   runApp(const MyApp());
 }
 

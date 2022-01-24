@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class Register extends StatefulWidget {
-  Register({ Key? key }) : super(key: key);
+class _Register extends StatefulWidget {
+  Register createState() => Register();
+}
+
+class Register extends State<_Register> {
 
   final GlobalKey<FormState> FormKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
@@ -101,11 +104,5 @@ class Register extends StatefulWidget {
       _success = true;
     };
   }
-  }
-
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    throw UnimplementedError();
   }
 }

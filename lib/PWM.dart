@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors, file_names
 import 'package:flutter/material.dart';
 
 class PWM extends StatelessWidget {
@@ -7,8 +6,8 @@ class PWM extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:AppBar(title: Text('Passwortmanager')),
-      body: Center(
+      appBar:AppBar(title: const Text('Passwortmanager')),
+      body: const Center(
         child: Text(
           'This is a new screen',
           style: TextStyle(fontSize: 24.0)

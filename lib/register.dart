@@ -3,8 +3,15 @@ import 'package:flutter/material.dart';
 import 'main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class Register extends StatelessWidget {
-  const Register({Key? key}) : super(key: key);
+class Register extends StatefulWidget {
+  Register({ Key? key }) : super(key: key);
+
+  final GlobalKey<FormState> FormKey = GlobalKey<FormState>();
+  final emailController = TextEditingController();
+  final passwortController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  late bool? _success;
+  late String? _userEmail;
 
   @override
   Widget build(BuildContext context) {
@@ -68,15 +75,6 @@ class Register extends StatelessWidget {
                 ),
               ],
             ),
-            Container(
-              alignment: Alignment.center,
-              child: Text(_success == null
-                ? ""
-                : (_success
-                  ? "erfolgreich angemeldet " + userEmail 
-                  : "Anmeldung fehlgeschlagen")
-              ),
-            ),
           ],
         ),
       ),
@@ -86,30 +84,28 @@ class Register extends StatelessWidget {
       Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Login()));
   }
 
-  @override
-  void dispose() {
-    emailController.dispose();
-    passwortController.dispose();
-    super.dispose();
-  }
-  
+ 
   void _register() async {
-    bool _success;
-    String _userEmail = "";
-    final User user = (await _auth.createUserWithEmailAndPassword(
+    final User? user = (await _auth.createUserWithEmailAndPassword(
         email: emailController.text,
         password: passwortController.text,
       )).user;
 
   if (user != null) {
-    setState(() {
+    setState() {
       _success = true;
       _userEmail = user.email;
-    });
+    };
   } else {
-    setState(() {
+    setState() {
       _success = true;
-    });
+    };
   }
-  } 
+  }
+
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    throw UnimplementedError();
+  }
 }

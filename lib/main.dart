@@ -7,13 +7,9 @@ import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
-
-final GlobalKey<FormState> FormKey = GlobalKey<FormState>();
-final emailController = TextEditingController();
-final passwortController = TextEditingController();
-final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -101,7 +97,7 @@ class Login extends StatelessWidget {
     );
   }
     void _navigateToRegister(BuildContext context) {
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Register()));
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => Register()));
   }
     void _navigateToPwm(BuildContext context) {
       Navigator.of(context).push(MaterialPageRoute(builder: (context) => const PWM()));

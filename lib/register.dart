@@ -8,6 +8,7 @@ class Register extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool _success;
     return Scaffold(
       appBar:AppBar(
         title: const Text('Registrieren')
@@ -84,13 +85,22 @@ class Register extends StatelessWidget {
   void _navigateToLogin(BuildContext context) {
       Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Login()));
   }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwortController.dispose();
+    super.dispose();
+  }
   
   void _register() async {
+    bool _success;
+    String _userEmail = "";
     final User user = (await _auth.createUserWithEmailAndPassword(
         email: emailController.text,
         password: passwortController.text,
-      )
-  ).user;
+      )).user;
+
   if (user != null) {
     setState(() {
       _success = true;
@@ -101,5 +111,5 @@ class Register extends StatelessWidget {
       _success = true;
     });
   }
-  }
+  } 
 }

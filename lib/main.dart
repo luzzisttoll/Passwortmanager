@@ -15,9 +15,6 @@ final emailController = TextEditingController();
 final passwortController = TextEditingController();
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
-bool _success = Null as bool;
-String userEmail = "";
-
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 

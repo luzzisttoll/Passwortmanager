@@ -6,13 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:pwm/register.dart';
 import 'package:pwm/pwm.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_config.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-      options: DefaultFirebaseConfig
-          .platformOptions); //wert muss entfernt werden-->muss mittels android emulator ausgeführt werden.
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 

@@ -8,14 +8,11 @@ import 'package:pwm/pwm.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_config.dart';
 
-Future<void> main() async {
-  FlutterError.onError = (FlutterErrorDetails details) {
-    FlutterError.presentError(details);
-    if (kReleaseMode)
-      exit(1);
-  };
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseConfig.platformOptions);
+  await Firebase.initializeApp(
+      options: DefaultFirebaseConfig
+          .platformOptions); //wert muss entfernt werden-->muss mittels android emulator ausgeführt werden.
   runApp(const MyApp());
 }
 
@@ -37,64 +34,74 @@ class Login extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final emailController = TextEditingController();
+    final passwortController = TextEditingController();
+    User? user = FirebaseAuth.instance.currentUser;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Login'),
       ),
       body: Center(
         child: Column(
-          children: [      
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const Text(
-                      "Melden Sie sich an",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 20, height: 5)
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 16),
-                    child: TextFormField(
-                        decoration: const InputDecoration(
-                          border: UnderlineInputBorder(),
-                          labelText: 'Benutzername',
-                        )
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Text("Melden Sie sich an",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 20, height: 5)),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                  child: TextFormField(
+                      decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                    labelText: 'Email',
+                  )),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                  child: TextFormField(
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      border: UnderlineInputBorder(),
+                      labelText: 'Passwort',
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 16),
-                    child: TextFormField(
-                        decoration: const InputDecoration(
-                          border: UnderlineInputBorder(),
-                          labelText: 'Passwort',
-                        )
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
+            ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 ElevatedButton(
-                    child: const Text("Anmelden"),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.redAccent,
-                    ),
-                    onPressed: () {
-                      _navigateToPwm(context);
-                    },
+                  child: const Text("Anmelden"),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.redAccent,
+                  ),
+                  onPressed: () async {
+                    await FirebaseAuth.instance.signInWithEmailAndPassword(
+                        email: emailController.text,
+                        password: passwortController.text);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const PWM()),
+                    );
+                  },
                 ),
                 const SizedBox(width: 30),
                 ElevatedButton(
                   child: const Text("Registrieren"),
                   style: ElevatedButton.styleFrom(
-                  primary: Colors.redAccent,
+                    primary: Colors.redAccent,
                   ),
                   onPressed: () {
-                    _navigateToRegister(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Auth()),
+                    );
                   },
                 ),
               ],
@@ -103,11 +110,5 @@ class Login extends StatelessWidget {
         ),
       ),
     );
-  }
-    void _navigateToRegister(BuildContext context) {
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => Register()));
-  }
-    void _navigateToPwm(BuildContext context) {
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const PWM()));
   }
 }

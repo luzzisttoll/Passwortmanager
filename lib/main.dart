@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pwm/register.dart';
 import 'package:pwm/pwm.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -18,19 +19,20 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Passwortmanager',
       theme: ThemeData.dark(),
-      home: const Login(),
+      home: Login(),
     );
   }
 }
 
 class Login extends StatelessWidget {
-  const Login({Key? key}) : super(key: key);
+  Login({Key? key}) : super(key: key);
+
+  final _formKey = GlobalKey<FormState>();
+  final passwortController = TextEditingController();
+  final emailController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    final passwortController = TextEditingController();
-    final emailController = TextEditingController();
-    final _formKey = GlobalKey<FormState>();
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Login'),
@@ -63,6 +65,9 @@ class Login extends StatelessWidget {
                         }
                         return null;
                       },
+                      onSaved: (value) {
+                        emailController.text = value!;
+                      },
                       decoration: const InputDecoration(
                         prefixIcon: Icon(Icons.mail),
                         border: UnderlineInputBorder(),
@@ -86,6 +91,9 @@ class Login extends StatelessWidget {
                         return ("Bitte gültiges Passwort eingeben");
                       }
                     },
+                    onSaved: (value) {
+                      passwortController.text = value!;
+                    },
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.vpn_key),
                       border: UnderlineInputBorder(),
@@ -103,10 +111,8 @@ class Login extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     primary: Colors.redAccent,
                   ),
-                  onPressed: () async {
-                    await FirebaseAuth.instance.signInWithEmailAndPassword(
-                        email: emailController.text,
-                        password: passwortController.text);
+                  onPressed: () {
+                    signIn(emailController.text, passwortController.text);
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const PWM()),
@@ -132,5 +138,22 @@ class Login extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void signIn(String email, String passwort) async {
+    if (_formKey.currentState!.validate()) {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: passwort)
+          .then(
+            (uid) => {
+              Fluttertoast.showToast(msg: "Login erfolgreich"),
+            },
+          )
+          .catchError(
+        (e) {
+          Fluttertoast.showToast(msg: e!.message);
+        },
+      );
+    }
   }
 }

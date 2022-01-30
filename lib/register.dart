@@ -1,6 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pwm/models/user_model.dart';
+import 'PWM.dart';
 import 'main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:pwm/models/user_model.dart';
 
 class Auth extends StatefulWidget {
   const Auth({Key? key}) : super(key: key);
@@ -10,13 +15,13 @@ class Auth extends StatefulWidget {
 }
 
 class _AuthState extends State<Auth> {
+  final emailController = TextEditingController();
+  final passwortController = TextEditingController();
+  final confirmpasswortController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
-    final emailController = TextEditingController();
-    final passwortController = TextEditingController();
-    final confirmpasswortController = TextEditingController();
-    final _formKey = GlobalKey<FormState>();
-
     return Scaffold(
       appBar: AppBar(title: const Text('Registrieren')),
       body: Center(
@@ -62,6 +67,15 @@ class _AuthState extends State<Auth> {
                       autofocus: false,
                       controller: passwortController,
                       obscureText: true,
+                      validator: (value) {
+                        RegExp regex = RegExp(r'^.{6,}$');
+                        if (value!.isEmpty) {
+                          return ("Geben Sie bitte ihr Passwort ein");
+                        }
+                        if (!regex.hasMatch(value)) {
+                          return ("Bitte gültiges Passwort eingeben");
+                        }
+                      },
                       decoration: const InputDecoration(
                         prefixIcon: Icon(Icons.vpn_key),
                         border: UnderlineInputBorder(),
@@ -76,6 +90,13 @@ class _AuthState extends State<Auth> {
                       autofocus: false,
                       controller: confirmpasswortController,
                       obscureText: true,
+                      validator: (value) {
+                        if (confirmpasswortController.text !=
+                            passwortController) {
+                          return "Passwort stimmt nicht überein";
+                        }
+                        return null;
+                      },
                       decoration: const InputDecoration(
                         prefixIcon: Icon(Icons.vpn_key),
                         border: UnderlineInputBorder(),
@@ -93,15 +114,8 @@ class _AuthState extends State<Auth> {
                   style: ElevatedButton.styleFrom(
                     primary: Colors.redAccent,
                   ),
-                  onPressed: () async {
-                    await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                        email: emailController.text,
-                        password: passwortController.text);
-                    setState(() {});
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Login()),
-                    );
+                  onPressed: () {
+                    signUp(emailController.text, passwortController.text);
                   },
                 ),
               ],
@@ -110,5 +124,37 @@ class _AuthState extends State<Auth> {
         ),
       ),
     );
+  }
+
+  void signUp(String email, String passwort) async {
+    if (_formKey.currentState!.validate()) {
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: passwort)
+          .then((value) => {
+                postDetailsToFirestore(),
+              })
+          .catchError((e) {
+        Fluttertoast.showToast(msg: e!.message);
+      });
+    }
+  }
+
+  postDetailsToFirestore() async {
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    User? user = FirebaseAuth.instance.currentUser;
+
+    userModel UserModel = userModel();
+
+    UserModel.email = user!.email;
+    UserModel.uid = user.uid;
+
+    await firebaseFirestore
+        .collection("users")
+        .doc(user.uid)
+        .set(UserModel.toMap());
+    Fluttertoast.showToast(msg: "Account erfolgreich erstellt");
+
+    Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(builder: (context) => Login()), (route) => false);
   }
 }

@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,6 +14,8 @@ class _AuthState extends State<Auth> {
   Widget build(BuildContext context) {
     final emailController = TextEditingController();
     final passwortController = TextEditingController();
+    final confirmpasswortController = TextEditingController();
+    final _formKey = GlobalKey<FormState>();
 
     return Scaffold(
       appBar: AppBar(title: const Text('Registrieren')),
@@ -24,6 +24,7 @@ class _AuthState extends State<Auth> {
           children: [
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 const Text("Registrieren Sie sich.",
                     style: TextStyle(
@@ -32,45 +33,77 @@ class _AuthState extends State<Auth> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                   child: TextFormField(
-                      controller: emailController,
+                    textInputAction: TextInputAction.next,
+                    autofocus: false,
+                    keyboardType: TextInputType.emailAddress,
+                    controller: emailController,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return ("Geben Sie bitte eine Email ein");
+                      }
+
+                      if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                          .hasMatch(value)) {
+                        return ("Bitte geben Sie eine gültige Email ein");
+                      }
+                    },
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.mail),
+                      border: UnderlineInputBorder(),
+                      labelText: 'Email',
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                  child: TextFormField(
+                      textInputAction: TextInputAction.next,
+                      autofocus: false,
+                      controller: passwortController,
+                      obscureText: true,
                       decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.vpn_key),
                         border: UnderlineInputBorder(),
-                        labelText: 'Email',
+                        labelText: 'Passwort',
                       )),
                 ),
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                   child: TextFormField(
-                      controller: passwortController,
+                      textInputAction: TextInputAction.done,
+                      autofocus: false,
+                      controller: confirmpasswortController,
                       obscureText: true,
                       decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.vpn_key),
                         border: UnderlineInputBorder(),
-                        labelText: 'Passwort',
+                        labelText: 'Passwort bestätigen',
                       )),
                 ),
               ],
             ),
             Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 const SizedBox(width: 30),
                 ElevatedButton(
-                    child: const Text("Registrieren"),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.redAccent,
-                    ),
-                    onPressed: () async {
-                      await FirebaseAuth.instance
-                          .createUserWithEmailAndPassword(
-                              email: emailController.text,
-                              password: passwortController.text);
-                      setState(() {});
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const Login()),
-                      );
-                    }),
+                  child: const Text("User anlegen"),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.redAccent,
+                  ),
+                  onPressed: () async {
+                    await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                        email: emailController.text,
+                        password: passwortController.text);
+                    setState(() {});
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Login()),
+                    );
+                  },
+                ),
               ],
             ),
           ],

@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "130372734573",
-    "project_id": "passwortmanager-13f54",
-    "storage_bucket": "passwortmanager-13f54.appspot.com"
+    "project_number": "637092316671",
+    "project_id": "passwortmanagert",
+    "storage_bucket": "passwortmanagert.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:130372734573:android:c0d263e432ccfc8fdff964",
+        "mobilesdk_app_id": "1:637092316671:android:2c7f9ace888360114b13ca",
         "android_client_info": {
-          "package_name": "com.example.pwm"
+          "package_name": "com.auth.pwm"
         }
       },
       "oauth_client": [
         {
-          "client_id": "130372734573-m7hi83h13ubh1b772bl37qf4hsporpon.apps.googleusercontent.com",
+          "client_id": "637092316671-p9li6fcc9rt4dpskfs8nregnaa5tl5v6.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAo4gH5dxIzd7dJ1EVeDpN9av48lujtWjU"
+          "current_key": "AIzaSyBEJN6e5RcLX71tPaMESeyHh1Ug-tJAwKY"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "130372734573-m7hi83h13ubh1b772bl37qf4hsporpon.apps.googleusercontent.com",
+              "client_id": "637092316671-p9li6fcc9rt4dpskfs8nregnaa5tl5v6.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

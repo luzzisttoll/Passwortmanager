@@ -1,13 +1,10 @@
-import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pwm/register.dart';
 import 'package:pwm/pwm.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const MyApp());
@@ -28,12 +25,11 @@ class MyApp extends StatelessWidget {
 
 class Login extends StatelessWidget {
   const Login({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    final emailController = TextEditingController();
     final passwortController = TextEditingController();
-    User? user = FirebaseAuth.instance.currentUser;
+    final emailController = TextEditingController();
+    final _formKey = GlobalKey<FormState>();
 
     return Scaffold(
       appBar: AppBar(
@@ -52,17 +48,46 @@ class Login extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                   child: TextFormField(
+                      textInputAction: TextInputAction.next,
+                      autofocus: false,
+                      keyboardType: TextInputType.emailAddress,
+                      controller: emailController,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return ("Geben Sie bitte eine Email ein");
+                        }
+
+                        if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                            .hasMatch(value)) {
+                          return ("Bitte geben Sie eine gültige Email ein");
+                        }
+                        return null;
+                      },
                       decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: 'Email',
-                  )),
+                        prefixIcon: Icon(Icons.mail),
+                        border: UnderlineInputBorder(),
+                        labelText: 'Email',
+                      )),
                 ),
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                   child: TextFormField(
+                    textInputAction: TextInputAction.done,
+                    autofocus: false,
+                    controller: passwortController,
                     obscureText: true,
+                    validator: (value) {
+                      RegExp regex = RegExp(r'^.{6,}$');
+                      if (value!.isEmpty) {
+                        return ("Geben Sie bitte ihr Passwort ein");
+                      }
+                      if (!regex.hasMatch(value)) {
+                        return ("Bitte gültiges Passwort eingeben");
+                      }
+                    },
                     decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.vpn_key),
                       border: UnderlineInputBorder(),
                       labelText: 'Passwort',
                     ),
@@ -71,7 +96,7 @@ class Login extends StatelessWidget {
               ],
             ),
             Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 ElevatedButton(
                   child: const Text("Anmelden"),

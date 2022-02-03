@@ -1,11 +1,11 @@
-class userModel {
+class UserModel {
   String? uid;
   String? email;
 
-  userModel({this.uid, this.email});
+  UserModel({this.uid, this.email});
 
-  factory userModel.fromMap(map) {
-    return userModel(
+  factory UserModel.fromMap(map) {
+    return UserModel(
       uid: map['uid'],
       email: map['email'],
     );

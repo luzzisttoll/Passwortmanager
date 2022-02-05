@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pwm/pwm.dart';
 import 'package:pwm/register.dart';
 import 'package:pwm/pwm.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -54,29 +55,30 @@ class Login extends StatelessWidget {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     child: TextFormField(
-                        textInputAction: TextInputAction.next,
-                        autofocus: false,
-                        keyboardType: TextInputType.emailAddress,
-                        controller: emailController,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return ("Geben Sie bitte eine Email ein");
-                          }
+                      textInputAction: TextInputAction.next,
+                      autofocus: false,
+                      keyboardType: TextInputType.emailAddress,
+                      controller: emailController,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return ("Geben Sie bitte eine Email ein");
+                        }
 
-                          if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
-                              .hasMatch(value)) {
-                            return ("Bitte geben Sie eine gültige Email ein");
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          emailController.text = value!;
-                        },
-                        decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.mail),
-                          border: UnderlineInputBorder(),
-                          labelText: 'Email',
-                        )),
+                        if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                            .hasMatch(value)) {
+                          return ("Bitte geben Sie eine gültige Email ein");
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        emailController.text = value!;
+                      },
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.mail),
+                        border: UnderlineInputBorder(),
+                        labelText: 'Email',
+                      ),
+                    ),
                   ),
                   Padding(
                     padding:
@@ -116,9 +118,8 @@ class Login extends StatelessWidget {
                       primary: Colors.redAccent,
                     ),
                     onPressed: () {
-                      signIn(emailController.text, passwortController.text);
-                      Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => const PWM()));
+                      signIn(emailController.text, passwortController.text,
+                          context);
                     },
                   ),
                   const SizedBox(width: 30),
@@ -143,13 +144,15 @@ class Login extends StatelessWidget {
     );
   }
 
-  void signIn(String email, String passwort) async {
+  void signIn(String email, String passwort, BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: passwort)
           .then(
             (uid) => {
               Fluttertoast.showToast(msg: "Login erfolgreich"),
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const pwm()))
             },
           )
           .catchError(

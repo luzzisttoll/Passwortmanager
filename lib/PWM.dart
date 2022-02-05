@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:pwm/main.dart';
 import 'package:pwm/models/user_model.dart';
 
-class PWM extends StatefulWidget {
-  const PWM({Key? key}) : super(key: key);
+class pwm extends StatefulWidget {
+  const pwm({Key? key}) : super(key: key);
 
   @override
-  _PWMState createState() => _PWMState();
+  _pwmState createState() => _pwmState();
 }
 
-class _PWMState extends State<PWM> {
+class _pwmState extends State<pwm> {
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
 

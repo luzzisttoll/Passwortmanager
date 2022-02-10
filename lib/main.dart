@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pwm/pwm.dart';
 import 'package:pwm/register.dart';
-import 'package:pwm/pwm.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 Future<void> main() async {
@@ -31,6 +30,8 @@ class Login extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final passwortController = TextEditingController();
   final emailController = TextEditingController();
+  final _auth = FirebaseAuth.instance;
+  String errorMessage = "";
 
   @override
   Widget build(BuildContext context) {
@@ -109,6 +110,9 @@ class Login extends StatelessWidget {
                   ),
                 ],
               ),
+               Center(
+                child: Text(errorMessage),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
@@ -146,13 +150,13 @@ class Login extends StatelessWidget {
 
   void signIn(String email, String passwort, BuildContext context) async {
     if (_formKey.currentState!.validate()) {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: passwort)
-          .then(
-            (uid) => {
-              Fluttertoast.showToast(msg: "Login erfolgreich"),
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const pwm()))
+      try {
+      await _auth.signInWithEmailAndPassword(email: email, password: passwort)
+            .then(
+              (uid) => {
+                Fluttertoast.showToast(msg: "Login erfolgreich"),
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => const pwm()))
             },
           )
           .catchError(
@@ -160,6 +164,10 @@ class Login extends StatelessWidget {
           Fluttertoast.showToast(msg: e!.message);
         },
       );
+        errorMessage = "";
+      } on FirebaseAuthException catch (error) {
+        errorMessage = error.message!;
+      }
     }
   }
 }

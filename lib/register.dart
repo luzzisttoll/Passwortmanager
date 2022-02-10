@@ -17,6 +17,7 @@ class _AuthState extends State<Auth> {
   final passwortController = TextEditingController();
   final confirmpasswortController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  String errorMessage = "";
 
   @override
   Widget build(BuildContext context) {
@@ -107,6 +108,9 @@ class _AuthState extends State<Auth> {
                   ),
                 ],
               ),
+              Center(
+                child: Text(errorMessage),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -129,8 +133,10 @@ class _AuthState extends State<Auth> {
     );
   }
 
+  
   void signUp(String email, String passwort) async {
     if (_formKey.currentState!.validate()) {
+      try {
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: passwort)
           .then((value) => {
@@ -139,8 +145,13 @@ class _AuthState extends State<Auth> {
           .catchError((e) {
         Fluttertoast.showToast(msg: e!.message);
       });
+        errorMessage = "";
+  } on FirebaseAuthException catch (error) {
+    errorMessage = error.message!;
+  }
     }
   }
+
 
   postDetailsToFirestore() async {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;

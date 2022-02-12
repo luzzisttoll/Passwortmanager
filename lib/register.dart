@@ -131,14 +131,15 @@ class _AuthState extends State<Auth> {
 
   void signUp(String email, String passwort) async {
     if (_formKey.currentState!.validate()) {
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: passwort)
-          .then((value) => {
-                postDetailsToFirestore(),
-              })
-          .catchError((e) {
-        Fluttertoast.showToast(msg: e!.message);
-      });
+      try {
+        await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: email, password: passwort)
+            .then((value) => {
+                  postDetailsToFirestore(),
+                });
+      } catch (e) {
+        Fluttertoast.showToast(msg: "Email bereits in Verwendung");
+      }
     }
   }
 

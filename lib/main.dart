@@ -146,20 +146,18 @@ class Login extends StatelessWidget {
 
   void signIn(String email, String passwort, BuildContext context) async {
     if (_formKey.currentState!.validate()) {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: passwort)
-          .then(
-            (uid) => {
-              Fluttertoast.showToast(msg: "Login erfolgreich"),
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const pwm()))
-            },
-          )
-          .catchError(
-        (e) {
-          Fluttertoast.showToast(msg: e!.message);
-        },
-      );
+      try {
+        await FirebaseAuth.instance
+            .signInWithEmailAndPassword(email: email, password: passwort)
+            .then((uid) => {
+                  Fluttertoast.showToast(msg: "Login erfolgreich"),
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => const pwm())),
+                });
+      } catch (e) {
+        Fluttertoast.showToast(
+            msg: "Falsches Passwort oder User nicht vorhanden");
+      }
     }
   }
 }

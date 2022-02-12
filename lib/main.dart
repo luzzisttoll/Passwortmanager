@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pwm/pwm.dart';
 import 'package:pwm/register.dart';
-import 'package:pwm/pwm.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 Future<void> main() async {
@@ -64,7 +63,8 @@ class Login extends StatelessWidget {
                           return ("Geben Sie bitte eine Email ein");
                         }
 
-                        if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                        if (!RegExp(
+                                "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]") //nur richtige emails werden zugelassen(richtiges format)
                             .hasMatch(value)) {
                           return ("Bitte geben Sie eine gültige Email ein");
                         }
@@ -89,7 +89,8 @@ class Login extends StatelessWidget {
                       controller: passwortController,
                       obscureText: true,
                       validator: (value) {
-                        RegExp regex = RegExp(r'^.{6,}$');
+                        RegExp regex = RegExp(
+                            r'^.{6,}$'); //Passwort muss 6 Zeichen lang sein
                         if (value!.isEmpty) {
                           return ("Geben Sie bitte ihr Passwort ein");
                         }
@@ -151,8 +152,9 @@ class Login extends StatelessWidget {
             .signInWithEmailAndPassword(email: email, password: passwort)
             .then((uid) => {
                   Fluttertoast.showToast(msg: "Login erfolgreich"),
-                  Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => const pwm())),
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) =>
+                          const pwm())), //zuerst wird, wenn anmeldedaten stimmen, angemeldet und dann zu seite weitergeleitet
                 });
       } catch (e) {
         Fluttertoast.showToast(

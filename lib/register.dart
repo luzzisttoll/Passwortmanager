@@ -49,7 +49,8 @@ class _AuthState extends State<Auth> {
                           return ("Geben Sie bitte eine Email ein");
                         }
 
-                        if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                        if (!RegExp(
+                                "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]") //nur richtige emails werden zugelassen(richtiges format)
                             .hasMatch(value)) {
                           return ("Bitte geben Sie eine gültige Email ein");
                         }
@@ -70,7 +71,8 @@ class _AuthState extends State<Auth> {
                         controller: passwortController,
                         obscureText: true,
                         validator: (value) {
-                          RegExp regex = RegExp(r'^.{6,}$');
+                          RegExp regex = RegExp(
+                              r'^.{6,}$'); //Passwort muss 6 Zeichen lang sein
                           if (value!.isEmpty) {
                             return ("Geben Sie bitte ihr Passwort ein");
                           }
@@ -93,7 +95,8 @@ class _AuthState extends State<Auth> {
                         controller: confirmpasswortController,
                         obscureText: true,
                         validator: (value) {
-                          if (confirmpasswortController.text !=
+                          if (confirmpasswortController
+                                  .text != //Input in Textfeldern muss gleich sein
                               passwortController.text) {
                             return "Passwort stimmt nicht überein";
                           }
@@ -136,7 +139,7 @@ class _AuthState extends State<Auth> {
             .createUserWithEmailAndPassword(email: email, password: passwort)
             .then((value) => {
                   postDetailsToFirestore(),
-                });
+                }); //user wird erstellt und zur Firestore Datenbank hinzugefügt
       } catch (e) {
         Fluttertoast.showToast(msg: "Email bereits in Verwendung");
       }
@@ -144,18 +147,20 @@ class _AuthState extends State<Auth> {
   }
 
   postDetailsToFirestore() async {
+    //firestore datenbank wird aufgerufen, model wird aufgerufen, werte werden gesendet
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = FirebaseAuth.instance.currentUser;
 
     UserModel userModel = UserModel();
 
+    //alle werte werden geschrieben
     userModel.email = user!.email;
     userModel.uid = user.uid;
 
     await firebaseFirestore
-        .collection("users")
-        .doc(user.uid)
-        .set(userModel.toMap());
+        .collection("users") //collection erstellt
+        .doc(user.uid) //geht zu diesem dokument
+        .set(userModel.toMap()); //werte werden gesetzt
     Fluttertoast.showToast(msg: "Account erfolgreich erstellt");
 
     Navigator.pushAndRemoveUntil(context,

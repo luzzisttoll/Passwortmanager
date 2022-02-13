@@ -1,19 +1,17 @@
-// ignore_for_file: camel_case_types
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pwm/main.dart';
 import 'package:pwm/models/user_model.dart';
 
-class home extends StatefulWidget {
-  const home({Key? key}) : super(key: key);
+class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
 
   @override
-  _homeState createState() => _homeState();
+  _HomeState createState() => _HomeState();
 }
 
-class _homeState extends State<home> {
+class _HomeState extends State<Home> {
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
   int currentIndex = 0;
@@ -50,10 +48,11 @@ class _homeState extends State<home> {
               ),
               const SizedBox(height: 15),
               ActionChip(
-                  label: const Text("Abmelden"),
-                  onPressed: () {
-                    logout(context);
-                  }),
+                label: const Text("Abmelden"),
+                onPressed: () {
+                  logout(context);
+                },
+              ),
             ],
           ),
         ),

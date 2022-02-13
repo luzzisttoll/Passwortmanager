@@ -21,7 +21,7 @@ class _AuthState extends State<Auth> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Registrieren')),
+      appBar: AppBar(centerTitle: true, title: const Text('Registrieren')),
       body: Center(
         child: Form(
           key: _formKey,
@@ -117,7 +117,7 @@ class _AuthState extends State<Auth> {
                   ElevatedButton(
                     child: const Text("User anlegen"),
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.redAccent,
+                      primary: Colors.red.shade600,
                     ),
                     onPressed: () {
                       signUp(emailController.text, passwortController.text);

@@ -1,50 +1,49 @@
-// ignore_for_file: camel_case_types
-
 import 'package:flutter/material.dart';
 import 'package:pwm/pages/homescreen.dart';
-import 'package:pwm/pages/passw%C3%B6rter.dart';
+import 'package:pwm/pages/passwoerter.dart';
 
-class pwm extends StatefulWidget {
-  const pwm({Key? key}) : super(key: key);
+class Pwm extends StatefulWidget {
+  const Pwm({Key? key}) : super(key: key);
 
   @override
-  _pwmState createState() => _pwmState();
+  _PwmState createState() => _PwmState();
 }
 
-class _pwmState extends State<pwm> {
+class _PwmState extends State<Pwm> {
   int currentIndex = 0;
 
   final screens = [
-    const home(),
-    const passwoerter(),
+    const Home(),
+    const Passwoerter(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Passwortmanager')),
+      appBar: AppBar(centerTitle: true, title: const Text('Passwortmanager')),
       body: IndexedStack(
         //wird die seite gewechselt, bleiben die seiten unverändert
         index: currentIndex, //welche seite angezeicht wird
         children: screens,
       ),
       bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.shifting, //animation
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.white54,
-          currentIndex: currentIndex,
-          onTap: (index) => setState(() => currentIndex =
-              index), //durch klicken auf icon wird screen gewechselt
-          items: const [
-            BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Home',
-                backgroundColor: Colors.redAccent),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.vpn_key),
-                label: 'Passwörter',
-                backgroundColor: Colors.deepOrangeAccent),
-          ]),
+        type: BottomNavigationBarType.shifting, //animation
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white54,
+        currentIndex: currentIndex,
+        onTap: (index) => setState(() => currentIndex =
+            index), //durch klicken auf icon wird screen gewechselt
+        items: [
+          BottomNavigationBarItem(
+              icon: const Icon(Icons.home),
+              label: 'Home',
+              backgroundColor: Colors.red.shade600),
+          const BottomNavigationBarItem(
+              icon: Icon(Icons.vpn_key),
+              label: 'Passwörter',
+              backgroundColor: Colors.redAccent),
+        ],
+      ),
     );
   }
 }

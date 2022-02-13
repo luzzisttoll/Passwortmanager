@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:pwm/pwm.dart';
 import 'package:pwm/register.dart';
 import 'package:firebase_core/firebase_core.dart';
+
+import 'pwm.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +36,7 @@ class Login extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text('Login'),
       ),
       body: Center(
@@ -116,7 +118,7 @@ class Login extends StatelessWidget {
                   ElevatedButton(
                     child: const Text("Anmelden"),
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.redAccent,
+                      primary: Colors.red.shade600,
                     ),
                     onPressed: () {
                       signIn(emailController.text, passwortController.text,
@@ -127,7 +129,7 @@ class Login extends StatelessWidget {
                   ElevatedButton(
                     child: const Text("Registrieren"),
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.redAccent,
+                      primary: Colors.red.shade600,
                     ),
                     onPressed: () {
                       Navigator.push(
@@ -154,7 +156,7 @@ class Login extends StatelessWidget {
                   Fluttertoast.showToast(msg: "Login erfolgreich"),
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                       builder: (context) =>
-                          const pwm())), //zuerst wird, wenn anmeldedaten stimmen, angemeldet und dann zu seite weitergeleitet
+                          const Pwm())), //zuerst wird, wenn anmeldedaten stimmen, angemeldet und dann zu seite weitergeleitet
                 });
       } catch (e) {
         Fluttertoast.showToast(

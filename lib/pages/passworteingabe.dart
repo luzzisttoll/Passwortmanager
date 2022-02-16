@@ -64,7 +64,9 @@ class _EingabeState extends State<Eingabe> {
                       border: const UnderlineInputBorder(),
                       labelText: 'Passwort',
                       suffixIcon: IconButton(
-                        icon: const Icon(Icons.remove_red_eye_sharp),
+                        icon: Icon(showPwd
+                            ? CupertinoIcons.eye_fill
+                            : CupertinoIcons.eye_slash_fill),
                         onPressed: _show,
                       ),
                     ),

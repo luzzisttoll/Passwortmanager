@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pwm/pages/passworteingabe.dart';
 
 class Passwoerter extends StatefulWidget {
   const Passwoerter({Key? key}) : super(key: key);
@@ -14,25 +15,30 @@ class _PasswoerterState extends State<Passwoerter> {
     return Scaffold(
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'Ihre Passwörter',
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-            ),
-            Theme(
-              data: Theme.of(context)
-                  .copyWith(highlightColor: Colors.red.shade600),
-              child: FloatingActionButton(
-                onPressed: () => Fluttertoast.showToast(msg: "hs"),
-                backgroundColor: Colors.redAccent,
-                child: const Icon(Icons.add, color: Colors.white),
-              ),
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const <Widget>[
+                Text("Ihre Passwörter",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 20, height: 5)),
+              ],
             ),
           ],
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const Eingabe()),
+          );
+        },
+        backgroundColor: Colors.red.shade600,
+        child: const Icon(Icons.add, color: Colors.white),
+        tooltip: "Neues Passwort",
+        heroTag: "formular",
+      ),
     );
   }
 }

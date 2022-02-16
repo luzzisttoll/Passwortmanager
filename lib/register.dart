@@ -110,8 +110,9 @@ class _AuthState extends State<Auth> {
                   ),
                 ],
               ),
-              Row(
+              Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   const SizedBox(width: 30),
                   ElevatedButton(

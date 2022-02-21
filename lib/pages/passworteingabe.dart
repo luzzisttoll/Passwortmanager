@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -9,8 +11,8 @@ class Eingabe extends StatefulWidget {
 }
 
 class _EingabeState extends State<Eingabe> {
-  final passwort = TextEditingController();
-  final url = TextEditingController();
+  final passwortController = TextEditingController();
+  final urlController = TextEditingController();
   bool showPwd = true;
 
   @override
@@ -44,7 +46,7 @@ class _EingabeState extends State<Eingabe> {
                   child: TextFormField(
                     textInputAction: TextInputAction.done,
                     autofocus: false,
-                    controller: passwort,
+                    controller: passwortController,
                     obscureText: showPwd,
                     validator: (value) {
                       RegExp regex = RegExp(
@@ -57,7 +59,7 @@ class _EingabeState extends State<Eingabe> {
                       }
                     },
                     onSaved: (value) {
-                      passwort.text = value!;
+                      passwortController.text = value!;
                     },
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.vpn_key),
@@ -78,7 +80,7 @@ class _EingabeState extends State<Eingabe> {
                   child: TextFormField(
                     textInputAction: TextInputAction.done,
                     autofocus: false,
-                    controller: url,
+                    controller: urlController,
                     decoration: const InputDecoration(
                       prefixIcon: Icon(CupertinoIcons.globe),
                       border: UnderlineInputBorder(),
@@ -92,12 +94,13 @@ class _EingabeState extends State<Eingabe> {
                   children: <Widget>[
                     const SizedBox(width: 30),
                     ElevatedButton(
-                      child: const Text("User anlegen"),
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.red.shade600,
-                      ),
-                      onPressed: null,
-                    ),
+                        child: const Text("User anlegen"),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.red.shade600,
+                        ),
+                        onPressed:
+                            null //_update(passwortController, urlController),
+                        ),
                   ],
                 )
               ],
@@ -112,5 +115,22 @@ class _EingabeState extends State<Eingabe> {
     setState(() {
       showPwd = !showPwd;
     });
+  }
+}
+
+class NoteModel {
+  String? passwort;
+  String? url;
+
+  NoteModel({
+    required this.passwort,
+    required this.url,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      "passwort": passwort,
+      "url": url,
+    };
   }
 }

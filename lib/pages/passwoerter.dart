@@ -1,5 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pwm/pages/passworteingabe.dart';
 
 class Passwoerter extends StatefulWidget {
@@ -18,10 +18,29 @@ class _PasswoerterState extends State<Passwoerter> {
           children: [
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const <Widget>[
-                Text("Ihre Passwörter",
+              children: <Widget>[
+                const Text("Ihre Passwörter",
                     style: TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 20, height: 5)),
+                StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('users')
+                      .where("passwort")
+                      .where("url")
+                      .snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                            backgroundColor: Colors.lightBlueAccent),
+                      );
+                    } else if (snapshot.hasData) {
+                      print(snapshot.data!.docs);
+                    }
+                    return const CircularProgressIndicator();
+                  },
+                ),
               ],
             ),
           ],

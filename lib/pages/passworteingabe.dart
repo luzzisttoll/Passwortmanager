@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Eingabe extends StatefulWidget {
   const Eingabe({Key? key}) : super(key: key);
@@ -94,13 +95,14 @@ class _EingabeState extends State<Eingabe> {
                   children: <Widget>[
                     const SizedBox(width: 30),
                     ElevatedButton(
-                        child: const Text("User anlegen"),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.red.shade600,
-                        ),
-                        onPressed:
-                            null //_update(passwortController, urlController),
-                        ),
+                      child: const Text("User anlegen"),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.red.shade600,
+                      ),
+                      onPressed: () {
+                        updateUser(passwortController.text, urlController.text);
+                      },
+                    ),
                   ],
                 )
               ],
@@ -116,21 +118,13 @@ class _EingabeState extends State<Eingabe> {
       showPwd = !showPwd;
     });
   }
-}
 
-class NoteModel {
-  String? passwort;
-  String? url;
-
-  NoteModel({
-    required this.passwort,
-    required this.url,
-  });
-
-  Map<String, dynamic> toMap() {
-    return {
-      "passwort": passwort,
-      "url": url,
-    };
+  void updateUser(String passwort, String url) async {
+    int counter = 0;
+    User? user = FirebaseAuth.instance.currentUser;
+    FirebaseFirestore.instance.collection("users").doc(user!.uid).set(
+        {"passwort$counter": passwort, "url$counter": url},
+        SetOptions(
+            merge: true)).then((value) => Fluttertoast.showToast(msg: "hs"));
   }
 }

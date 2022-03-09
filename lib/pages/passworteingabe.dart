@@ -119,12 +119,13 @@ class _EingabeState extends State<Eingabe> {
     });
   }
 
+  static int counter = 0;
   void updateUser(String passwort, String url) async {
-    int counter = 0;
     User? user = FirebaseAuth.instance.currentUser;
-    FirebaseFirestore.instance.collection("users").doc(user!.uid).set(
-        {"passwort$counter": passwort, "url$counter": url},
-        SetOptions(
-            merge: true)).then((value) => Fluttertoast.showToast(msg: "hs"));
+    FirebaseFirestore.instance.collection("users").doc(user!.uid).update(
+      {"passwort $counter": passwort, "url $counter": url},
+    ).then(
+      (value) => counter++,
+    );
   }
 }

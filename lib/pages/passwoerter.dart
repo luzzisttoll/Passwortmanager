@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:pwm/pages/ausgabe.dart';
 import 'package:pwm/pages/passworteingabe.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Passwoerter extends StatefulWidget {
   const Passwoerter({Key? key}) : super(key: key);
@@ -10,6 +12,8 @@ class Passwoerter extends StatefulWidget {
 }
 
 class _PasswoerterState extends State<Passwoerter> {
+  static int counter = 0;
+  User? user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,20 +29,30 @@ class _PasswoerterState extends State<Passwoerter> {
                 StreamBuilder(
                   stream: FirebaseFirestore.instance
                       .collection('users')
-                      .where("passwort")
-                      .where("url")
+                      .where(("email"),
+                          isEqualTo: ("luca.mangeng@student.htldornbirn.at"))
                       .snapshots(),
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (!snapshot.hasData) {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                            backgroundColor: Colors.lightBlueAccent),
+                    List<Map> Passwortdaten = [];
+                    if (snapshot.hasData) {
+                      snapshot.data!.docs.forEach((element) {
+                        Passwortdaten.add({
+                          "passwort": element["passwort 0"],
+                          "url": element["url 0"]
+                        });
+                        //counter++;
+                      });
+                      return Column(
+                        children: [
+                          ...(Passwortdaten).map((Daten) {
+                            return ausgabe(data: Daten);
+                          })
+                        ],
                       );
-                    } else if (snapshot.hasData) {
-                      print(snapshot.data!.docs);
+                    } else {
+                      return Container();
                     }
-                    return const CircularProgressIndicator();
                   },
                 ),
               ],

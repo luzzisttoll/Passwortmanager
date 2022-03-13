@@ -119,13 +119,17 @@ class _EingabeState extends State<Eingabe> {
     });
   }
 
-  static int counter = 0;
-  void updateUser(String passwort, String url) async {
+  void updateUser(String passwort, String url) {
     User? user = FirebaseAuth.instance.currentUser;
-    FirebaseFirestore.instance.collection("users").doc(user!.uid).update(
+
+    var counter = FirebaseFirestore.instance
+        .collection("users")
+        .doc(user!.uid)
+        .update({"counter": FieldValue.increment(1)});
+
+    FirebaseFirestore.instance.collection("users").doc(user.uid).update(
       {"passwort $counter": passwort, "url $counter": url},
     ).then(
-      (value) => counter++,
-    );
+        (value) => Fluttertoast.showToast(msg: "Account erfolgreich erstellt"));
   }
 }

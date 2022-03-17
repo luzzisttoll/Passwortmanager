@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pwm/pages/passwoerter.dart';
 
 class Eingabe extends StatefulWidget {
   const Eingabe({Key? key}) : super(key: key);
@@ -13,6 +14,7 @@ class Eingabe extends StatefulWidget {
 
 class _EingabeState extends State<Eingabe> {
   final passwortController = TextEditingController();
+  final userController = TextEditingController();
   final urlController = TextEditingController();
   bool showPwd = true;
 
@@ -81,6 +83,20 @@ class _EingabeState extends State<Eingabe> {
                   child: TextFormField(
                     textInputAction: TextInputAction.done,
                     autofocus: false,
+                    controller: userController,
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(CupertinoIcons.person),
+                      border: UnderlineInputBorder(),
+                      labelText: 'Benutzername',
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                  child: TextFormField(
+                    textInputAction: TextInputAction.done,
+                    autofocus: false,
                     controller: urlController,
                     decoration: const InputDecoration(
                       prefixIcon: Icon(CupertinoIcons.globe),
@@ -100,7 +116,8 @@ class _EingabeState extends State<Eingabe> {
                         primary: Colors.red.shade600,
                       ),
                       onPressed: () {
-                        updateUser(passwortController.text, urlController.text);
+                        updateUser(passwortController.text, userController.text,
+                            urlController.text);
                       },
                     ),
                   ],
@@ -119,17 +136,22 @@ class _EingabeState extends State<Eingabe> {
     });
   }
 
-  void updateUser(String passwort, String url) {
+  void updateUser(String passwort, String benutzer, String url) {
     User? user = FirebaseAuth.instance.currentUser;
 
-    var counter = FirebaseFirestore.instance
+    List<Map<String, String>> account = [
+      {"passwort": passwort, "username": benutzer, "url": url}
+    ];
+
+    FirebaseFirestore.instance
         .collection("users")
         .doc(user!.uid)
-        .update({"counter": FieldValue.increment(1)});
-
-    FirebaseFirestore.instance.collection("users").doc(user.uid).update(
-      {"passwort $counter": passwort, "url $counter": url},
-    ).then(
-        (value) => Fluttertoast.showToast(msg: "Account erfolgreich erstellt"));
+        .update({"account": FieldValue.arrayUnion(account)}).then(
+      (value) => {
+        Fluttertoast.showToast(msg: "Account erfolgreich erstellt"),
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const Passwoerter()))
+      },
+    );
   }
 }

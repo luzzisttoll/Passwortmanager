@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pwm/PWM.dart';
 import 'package:pwm/pages/passwoerter.dart';
 
 class Eingabe extends StatefulWidget {
@@ -150,7 +151,7 @@ class _EingabeState extends State<Eingabe> {
       (value) => {
         Fluttertoast.showToast(msg: "Account erfolgreich erstellt"),
         Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const Passwoerter()))
+            MaterialPageRoute(builder: (context) => const Pwm()))
       },
     );
   }

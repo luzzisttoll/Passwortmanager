@@ -41,7 +41,6 @@ class _PasswoerterState extends State<Passwoerter> {
                           "passwort": element["passwort 0"],
                           "url": element["url 0"]
                         });
-                        //counter++;
                       });
                       return Column(
                         children: [
